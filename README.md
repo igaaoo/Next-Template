@@ -17,6 +17,8 @@ Dark Mode, Login with Cookies Session, Radix and Shadcn components, TailwindCSS,
 
 ### Main Settings
 #### Front End
+Set project name, description, navigation routes, links...
 ![image](https://github.com/igaaoo/Next-Template/assets/88206626/89a92bab-45dc-46af-a93a-32e9a240c4a8)
 #### Backend 
+Set database connection setting and more
 ![image](https://github.com/igaaoo/Next-Template/assets/88206626/f29d048e-dc90-4a3e-b789-9f833906ccfe)
