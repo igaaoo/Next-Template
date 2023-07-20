@@ -1,4 +1,6 @@
 # Next-Template
+## Features:
+Dark Mode, Login with Cookies Session, Radix and Shadcn components, TailwindCSS, Typescript, Eslint, Prettier, and MORE!
 
 ## Previews:
 ### Login
