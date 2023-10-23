@@ -9,7 +9,8 @@ import { TailwindIndicator } from "@/components/tailwind-indicator";
 import { ThemeProvider } from "@/components/theme-provider";
 import AuthContextProvider from "@/context/AuthContextProvider";
 import DataContextProvider from "@/context/DataContextProvider";
-import Head from "next/head";
+
+
 
 export const metadata: Metadata = {
   title: {
@@ -24,7 +25,12 @@ export const metadata: Metadata = {
   icons: {
     icon: "/favicon.ico",
 
+    apple: "/icon-512x512.png",
+
   },
+  manifest: '/manifest.json',
+
+
 };
 
 interface RootLayoutProps {
@@ -37,9 +43,6 @@ export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <>
       <html lang="pt-BR" suppressHydrationWarning>
-        <Head >
-          <title>Next Template</title>
-        </Head>
         <body
           className={cn(
             "min-h-screen bg-background font-sans antialiased",
@@ -50,15 +53,15 @@ export default function RootLayout({ children }: RootLayoutProps) {
             <DataContextProvider>
               <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
                 <div className="relative flex min-h-screen flex-col">
+
                   <SiteHeader />
-                  <div className="flex-1">{children}</div>
+                  <div className="flex w-full p-0 md:px-20 lg:px-20">{children}</div>
                 </div>
-                <TailwindIndicator />
               </ThemeProvider>
             </DataContextProvider>
           </AuthContextProvider>
           <footer >
-            <p className="text-center"><small>&copy; Copyright Example - {currentYear} - Igor Neves</small></p>
+            <p className="text-center"><small>&copy; Copyright {currentYear} - Your Name</small></p>
           </footer>
         </body>
       </html>

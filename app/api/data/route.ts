@@ -1,40 +1,37 @@
 import { NextResponse } from "next/server";
 const db = require("../../../backend/config/connection");
 import { FormatStore } from "@/lib/utils/formatData";
+import { validateToken } from "@/utils/jwtController";
 
 export async function POST(request: Request, response: Response) {
   const { token } = await request.json();
 
+  if (!token || !validateToken(token)) return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
 
-  if (token == process.env.TOKEN) {
-    try {
-      var connection = await db.connect();
 
-      console.log("Geting data...");
+  try {
+    var connection = await db.connect();
 
-      const response = await connection.execute(
-        "SELECT * FROM example.table"
-      );
+    console.log("Geting data...");
 
-      var result = FormatStore(response.rows);
+    const response = await connection.execute(
+      "SELECT * FROM example.table"
+    );
 
-    } catch (err: any) {
-      return err;
-    } finally {
-      if (connection) {
-        try {
-          await connection.close();
-        } catch (err: any) {
-          return err;
-        }
+    var result = FormatStore(response.rows);
+
+  } catch (err: any) {
+    return err;
+  } finally {
+    if (connection) {
+      try {
+        await connection.close();
+      } catch (err: any) {
+        return err;
       }
     }
-
-
-    return NextResponse.json({ result, }, { status: 200 });
-  } else {
-    return NextResponse.json({ message: 'Invalid User/Token' }, { status: 401 });
   }
 
 
+  return NextResponse.json({ result, }, { status: 200 });
 }

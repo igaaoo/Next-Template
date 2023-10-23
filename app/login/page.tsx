@@ -18,7 +18,7 @@ import { AlertCircle, CheckCircle2, Loader2 } from "lucide-react";
 
 
 export default function IndexPage() {
-  const [errorUser, setErrorUser] = useState(false);
+  const [errorUser, setErrorUser] = useState('');
   const [errorInputs, setErrorInputs] = useState(false);
   const [user, setUser] = useState('');
   const [password, setPassword] = useState('');
@@ -48,53 +48,52 @@ export default function IndexPage() {
     }).then((res) => {
       if (res.status === 200) {
         setLoginSuccess(true);
-        setErrorUser(false);
+        setErrorUser('');
         login(res.data.token);
-
         window.location.href = '/';
         setLoading(false);
       }
     }
     ).catch((err) => {
-      if (err.response.status === 500) {
-        setErrorUser(true);
-        setLoading(false);
-      }
+
+      setErrorUser(err.response.data.message);
+      setLoading(false);
+
     });
   }
 
 
   return (
-    <div className="mt-20 flex justify-center">
+    <div className="mt-20 flex w-full justify-center">
       <Card className="w-[350px]">
         <CardHeader>
-          <CardTitle className="text-center text-xl">Login</CardTitle>
-          <CardDescription className="text-center ">User and Password</CardDescription>
+          <CardTitle className="text-center text-xl">Sistema de Controller</CardTitle>
+          <CardDescription className="text-center ">Usuário e Senha AD</CardDescription>
         </CardHeader>
         <CardContent>
 
           {/* Alertas */}
-          {errorUser ? <Alert variant="destructive" className="mb-4">
+          {errorUser && <Alert variant="destructive" className="mb-4">
             <AlertCircle className="h-4 w-4" />
             <AlertTitle>Error</AlertTitle>
             <AlertDescription>
-              Invalid user.
+              {errorUser}
             </AlertDescription>
-          </Alert> : null}
+          </Alert>}
 
           {errorInputs ? <Alert variant="destructive" className="mb-4">
             <AlertCircle className="h-4 w-4" />
             <AlertTitle>Error</AlertTitle>
             <AlertDescription>
-              Please fill out all fields.
+              Please, fill in all fields.
             </AlertDescription>
           </Alert> : null}
 
           {loginSuccess ? <Alert className="mb-4 border-green-500">
             <CheckCircle2 className="h-4 w-4 " color="green" />
-            <AlertTitle className="text-green-500">Sucesso</AlertTitle>
+            <AlertTitle className="text-green-500">Sucess</AlertTitle>
             <AlertDescription className="text-green-500">
-              Success login.
+              Redirecting to home...
             </AlertDescription>
           </Alert> : null}
 
@@ -120,7 +119,7 @@ export default function IndexPage() {
             </div>
 
             <div className="mt-6 flex justify-between">
-              <Button type="button" variant="ghost" onClick={() => {
+              <Button variant="ghost" onClick={() => {
                 const loginInput = document.getElementById('login') as HTMLInputElement | null;
                 const passwordInput = document.getElementById('password') as HTMLInputElement | null;
                 if (loginInput && passwordInput) {
@@ -130,10 +129,10 @@ export default function IndexPage() {
               }
               }>Clear</Button>
 
-              {loading ? (<Button disabled>
+              {loading ? (<Button type="button" disabled>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                 Wait a moment...
-              </Button>) : (<Button type="submit" >Submit</Button>)}
+              </Button>) : (<Button type="submit" >Acess</Button>)}
             </div>
           </form>
 

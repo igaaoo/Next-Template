@@ -1,22 +1,42 @@
 export type SiteConfig = typeof siteConfig;
 
 export const siteConfig = {
-  name: "", // Shows next to the logo
+  name: "Template",
   description:
-    "Template for Next Projects with Typescript, TailwindCSS, ESLint, Prettier, Radix, Login, Session on Cookies, Dark Theme and more!",
+    "Template for Nextjs Aplications",
   mainNav: [
     {
       title: "Home",
       href: "/",
+      security: 'public',
+
     },
     {
-      title: "Data Table Example",
-      href: "/datatable",
+      title: "Private Page",
+      href: "/privatePage",
+      security: 'private',
     },
+    {
+      title: "Configurations",
+      href: "/configuracoes",
+      security: 'private',
+      type: 'dropdown',
+      links: [
+        {
+          title: 'Config 1',
+          href: '/config1'
+        },
+        {
+          title: 'Config 2',
+          href: '/config2'
+        },
+      ]
+    },
+
 
   ],
   links: {
     home: "/",
-    dashboard: "/dashboard",
+    // dashboard: "/dash",
   },
 };

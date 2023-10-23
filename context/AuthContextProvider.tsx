@@ -1,51 +1,80 @@
 'use client';
 import { ReactNode, useEffect, useState } from 'react';
 import AuthContext, { AuthContextType } from './AuthContext';
-import { redirect } from 'next/navigation';
+import { redirect, usePathname } from 'next/navigation';
 import { sessionName, sessionExpires } from '@/config/session';
+import jwt from 'jsonwebtoken';
+import { siteConfig } from '@/config/site';
 
 import { deleteCookie, getCookie, hasCookie, setCookie } from 'cookies-next';
+import { jwtType } from '@/types/jwtType';
 
 interface AuthContextProviderProps {
   children: ReactNode;
-  // Outras propriedades que você queira passar para o provedor de contexto
 }
 
 const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
-  // Defina o estado e as funções de atualização dos dados do contexto
+  let pathName = usePathname();
+
   const [token, setToken] = useState('');
+  const [user, setUser] = useState('');
+  const [role, setRole] = useState('');
 
 
   const login = (token: string) => {
     setToken(token);
     setCookie(sessionName, token, { maxAge: sessionExpires });
+
+    const decodedToken = jwt.decode(token) as jwtType;
+
+    setUser(decodedToken.user);
+    setRole(decodedToken.role);
   };
 
   const logout = () => {
-    deleteCookie('tokenTemplate');
+    deleteCookie(sessionName);
     setToken('');
   };
 
 
-
   const contextValue: AuthContextType = {
     token,
+    user,
+    role,
     login,
     logout,
   };
 
 
   useEffect(() => {
-
     if (hasCookie(sessionName)) {
       login(getCookie(sessionName)!.toString());
+      siteConfig.mainNav.map((item) => {
+        if (item.type !== 'dropdown') {
+          if (item.href == pathName) {
+            handlePrivateRoute(item);
+          }
+        } else {
+          item.links.map((subItem) => {
+            if (subItem.href == pathName) {
+              handlePrivateRoute(item);
+            }
+          });
+        }
+      });
     } else {
-      if (window.location.pathname != '/login') {
+      if (pathName != '/login') {
         redirect('/login');
       }
     }
+  }, [role]);
 
-  }, []);
+
+  function handlePrivateRoute(item: any) {
+    if (item.security === 'private' && role === 'user') {
+      redirect('/');
+    }
+  }
 
 
   return (
